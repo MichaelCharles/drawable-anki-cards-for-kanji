@@ -1,0 +1,30 @@
+<div class="container">
+  <div class="content">
+    <h1>{{Prompt}}</h1>
+    <div id="results">
+      <div id="drawnKanjiArea">
+        <img id="drawnKanji" src="" />
+      </div>
+      <div id="answer">
+        <h1>
+          {{Kanji}}
+        </h1>
+      </div>
+    </div>
+    <p>{{Notes}}</p>
+  </div>
+</div>
+
+<script>
+      (function () {
+      (function loadData() {
+        try {
+            const drawData = window.drawData;
+            const drawnKanji = document.getElementById("drawnKanji");
+            drawnKanji.src = drawData;
+        } catch (e) {
+            console.log(e)
+        }
+      })()
+    })();
+</script>

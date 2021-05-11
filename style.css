@@ -1,0 +1,57 @@
+.card {
+    font-family: "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic ProN", "游ゴシック",
+      "游ゴシック体", YuGothic, "Yu Gothic", "メイリオ", Meiryo, "ＭＳ ゴシック",
+      "MS Gothic", HiraKakuProN-W3, "TakaoExゴシック", TakaoExGothic,
+      "MotoyaLCedar", "Droid Sans Japanese", sans-serif;
+    font-size: 20px;
+    text-align: center;
+    color: black;
+    background-color: white;
+  }
+  
+  .content,
+  .container {
+    position: relative;
+  }
+  #drawable-area {
+    border: 2px solid #212121;
+    cursor: crosshair;
+  }
+  .night_mode #drawable-area {
+    border: 2px solid #f2f2f2;
+  }
+  .next-button-row {
+    display: flex;
+    flex: 1;
+    align-items: flex-end;
+    justify-content: flex-end;
+    margin-top: 1em;
+  }
+  
+  #results {
+    display: flex;
+    border: 2px solid #212121;
+  }
+  .night_mode #results {
+    border: 2px solid #f2f2f2;
+  }
+  #drawnKanjiArea {
+    flex: 1;
+    border-right: 2px dotted #cccccc;
+  }
+  #drawnKanji {
+    width: 100%;
+  }
+  #answer {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #answer h1 {
+    font-size: 25vw;
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+  }
+  

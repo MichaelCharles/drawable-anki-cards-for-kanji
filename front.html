@@ -1,0 +1,178 @@
+<div class="container">
+  <div class="content">
+    <h1>{{Prompt}}</h1>
+    <canvas id="drawable-area" height="100px" width="100px"> </canvas>
+  </div>
+</div>
+
+<script>
+  (function () {
+  (function resizeCanvas() {
+    const canvas = document.getElementById("drawable-area");
+    const regions = document.getElementById("regions");
+
+    const baseSize = Math.round(
+      window.innerWidth >= window.innerHeight
+        ? window.innerHeight
+        : window.innerWidth) * 0.9;
+    const calculatedSize = baseSize > 450 ? 450 : baseSize;
+
+    canvas.width = calculatedSize;
+    canvas.height = calculatedSize;
+  })();
+
+  window.requestAnimFrame = (function (callback) {
+    return (
+      window.requestAnimationFrame ||
+      window.webkitRequestAnimationFrame ||
+      window.mozRequestAnimationFrame ||
+      window.oRequestAnimationFrame ||
+      window.msRequestAnimaitonFrame ||
+      function (callback) {
+        window.setTimeout(callback, 1000 / 60);
+      }
+    );
+  })();
+
+  const canvas = document.getElementById("drawable-area");
+  const nextButton = document.getElementById("next-button");
+  const isNightMode = document.getElementsByClassName("night_mode").length > 0 ? true : false;
+  var ctx = canvas.getContext("2d");
+  ctx.strokeStyle = isNightMode ? "#f2f2f2" : "#212121";
+  ctx.lineWidth = 4;
+
+  function saveData() {
+    var drawData = canvas.toDataURL();
+    window.drawData = drawData;
+  }
+
+  var drawing = false;
+  var mousePos = { x: 0, y: 0 };
+  var lastPos = mousePos;
+  canvas.addEventListener(
+    "mousedown",
+    function (e) {
+      drawing = true;
+      lastPos = getMousePos(canvas, e);
+    },
+    false
+  );
+  canvas.addEventListener(
+    "mouseup",
+    function (e) {
+      drawing = false;
+    },
+    false
+  );
+  canvas.addEventListener(
+    "mousemove",
+    function (e) {
+      mousePos = getMousePos(canvas, e);
+    },
+    false
+  );
+
+  canvas.addEventListener(
+    "touchstart",
+    function (e) {
+      mousePos = getTouchPos(canvas, e);
+      var touch = e.touches[0];
+      var mouseEvent = new MouseEvent("mousedown", {
+        clientX: touch.clientX,
+        clientY: touch.clientY,
+      });
+      canvas.dispatchEvent(mouseEvent);
+    },
+    false
+  );
+  canvas.addEventListener(
+    "touchend",
+    function (e) {
+      var mouseEvent = new MouseEvent("mouseup", {});
+      canvas.dispatchEvent(mouseEvent);
+    },
+    false
+  );
+  canvas.addEventListener(
+    "touchmove",
+    function (e) {
+      var touch = e.touches[0];
+      var mouseEvent = new MouseEvent("mousemove", {
+        clientX: touch.clientX,
+        clientY: touch.clientY,
+      });
+      canvas.dispatchEvent(mouseEvent);
+    },
+    false
+  );
+
+  document.body.addEventListener(
+    "touchstart",
+    function (e) {
+      if (e.target == canvas) {
+        e.preventDefault();
+      }
+    },
+    false
+  );
+  document.body.addEventListener(
+    "touchend",
+    function (e) {
+      if (e.target == canvas) {
+        e.preventDefault();
+      }
+    },
+    false
+  );
+  document.body.addEventListener(
+    "touchmove",
+    function (e) {
+      if (e.target == canvas) {
+        e.preventDefault();
+      }
+    },
+    false
+  );
+
+  function getMousePos(canvasDom, mouseEvent) {
+    var rect = canvasDom.getBoundingClientRect();
+    return {
+      x: mouseEvent.clientX - rect.left,
+      y: mouseEvent.clientY - rect.top,
+    };
+  }
+
+  function getTouchPos(canvasDom, touchEvent) {
+    var rect = canvasDom.getBoundingClientRect();
+    return {
+      x: touchEvent.touches[0].clientX - rect.left,
+      y: touchEvent.touches[0].clientY - rect.top,
+    };
+  }
+
+  function renderCanvas() {
+    if (drawing) {
+      ctx.moveTo(lastPos.x, lastPos.y);
+      ctx.lineTo(mousePos.x, mousePos.y);
+      ctx.stroke();
+      lastPos = mousePos;
+      saveData();
+    }
+  }
+
+  function clearCanvas() {
+    canvas.width = canvas.width;
+  }
+
+  function cancelAllButNext(e) {
+      if (e.target != canvas && e.target != nextButton) {
+        e.preventDefault();
+      }
+  }
+
+  (function drawLoop() {
+    requestAnimFrame(drawLoop);
+    renderCanvas();
+  })();
+})();
+</script>
